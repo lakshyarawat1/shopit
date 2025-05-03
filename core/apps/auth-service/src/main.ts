@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { errorMiddleware } from '../../../packages/error_handler/error_middleware';
+import cookieParser from 'cookie-parser';
 
 const host = process.env.HOST ?? 'localhost';
 
@@ -11,6 +14,10 @@ app.use(cors({
   credentials: true,
 }),
 );
+
+app.use(errorMiddleware);
+app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send({ message: 'Hello from Auth-Service' });
