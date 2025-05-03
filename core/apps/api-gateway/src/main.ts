@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import express from 'express';
 import cors from 'cors';
 import proxy from 'express-http-proxy';
@@ -45,7 +40,7 @@ app.use("/", proxy(
   "http://localhost:6001",
 ))
 
-app.get('/api', (req, res) => {
+app.get('/gateway-health', (req, res) => {
   res.send({ message: 'Welcome to api-gateway!' });
 });
 

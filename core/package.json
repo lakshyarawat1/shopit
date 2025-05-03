@@ -3,12 +3,23 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev" : "pnpx nx run-many --target=serve --all"
+    "dev": "pnpx nx run-many --target=serve --all"
   },
   "private": true,
   "dependencies": {
-    "axios": "^1.6.0",
-    "express": "^4.21.2"
+    "@types/axios": "^0.14.4",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express-rate-limit": "^6.0.2",
+    "@types/morgan": "^1.9.9",
+    "axios": "^1.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-http-proxy": "^2.1.1",
+    "express-rate-limit": "^7.5.0",
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
