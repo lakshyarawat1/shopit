@@ -41,6 +41,10 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+app.use("/", proxy(
+  "http://localhost:6001",
+))
+
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to api-gateway!' });
 });
