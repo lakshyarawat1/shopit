@@ -1,7 +1,7 @@
 import { AppError } from ".";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
-export const errorMiddleware = (err: Error, req: Request, res: Response) => {
+export const errorMiddleware = (err: Error, req: Request, res: Response, next:NextFunction) => {
     if (err instanceof AppError) {
         console.log(`Error ${req.method} ${req.url} - ${err.message}`);
 
@@ -15,5 +15,6 @@ export const errorMiddleware = (err: Error, req: Request, res: Response) => {
     console.log("Unhandled Error", err.message);
     res.status(500).json({
         error: "Something went wrong ! Try again later."
-    })
+    });
+    return;
  }
