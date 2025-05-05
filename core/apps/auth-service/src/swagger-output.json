@@ -1,4 +1,4 @@
- {
+{
   "swagger": "2.0",
   "info": {
     "title": "Auth Service API",
@@ -6,12 +6,12 @@
     "version": "1.0.0"
   },
   "host": "localhost:6001",
-  "basePath": "/",
+  "basePath": "/api",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/api/user-registration": {
+    "/user-registration": {
       "post": {
         "description": "",
         "parameters": [
@@ -22,15 +22,44 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "Lakshya"
+                  "example": "any"
                 },
                 "email": {
-                  "example": "lakshya.paramount@gmail.com"
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/verify-user": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "otp": {
+                  "example": "any"
                 },
                 "password": {
-                  "example": "Lakshya@123"
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
                 }
-              
               }
             }
           }
