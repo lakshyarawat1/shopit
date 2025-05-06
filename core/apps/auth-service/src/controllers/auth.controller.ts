@@ -1,6 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { NextFunction, Request, Response } from "express";
-import { checkOTPRestrictions, sendOTP, trackOTPRequest, validateRegistrationData, verifyOTP } from "../utils/auth.helper";
+import { checkOTPRestrictions, handleForgotPassword, sendOTP, trackOTPRequest, validateRegistrationData, verifyForgotPasswordOTP, verifyOTP } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { AuthenticationError, ValidationError } from "@packages/error_handler";
 import bcrypt from "bcryptjs";
@@ -94,5 +94,47 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
     } catch (err) {
         return next(err);
+    }
+}
+
+export const userForgotPassword = async (req: Request, res: Response, next: NextFunction) => { 
+    await handleForgotPassword(req, res, next, "user");
+
+}
+
+export const verifyUserForgotPassword = async (req: Request, res: Response, next: NextFunction) => { 
+    await verifyForgotPasswordOTP(req, res, next);
+}
+
+export const resetUserPassword = async (req: Request, res: Response, next: NextFunction) => { 
+    try {
+        const { email, newPassword } = req.body;
+
+        if(!email || !newPassword) {
+            return next(new ValidationError("Please provide all required fields."));
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) {
+            return next(new ValidationError("User not found !"));
+        }
+
+        const isSamePassword = await bcrypt.compare(newPassword, user.password!);
+
+        if(isSamePassword) {
+            return next(new ValidationError("New password cannot be same as old password."));
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await prisma.user.update({
+            where: { email },
+            data: { password: hashedPassword }
+        })
+
+        res.status(200).json({
+            message: "Password reset successfully !",
+        })
+    } catch (err) { 
+        next(err);
     }
 }
