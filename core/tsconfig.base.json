@@ -4,7 +4,7 @@
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "importHelpers": true,
-    "baseUrl" : ".",
+    "baseUrl": ".",
     "isolatedModules": true,
     "lib": ["es2022"],
     "module": "nodenext",
@@ -18,9 +18,7 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@packages/*" : [
-        "packages/*"
-      ]
+      "@packages/*": ["packages/*"]
     },
     "customConditions": ["development"]
   }
