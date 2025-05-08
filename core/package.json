@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "pnpx nx run-many --target=serve --all",
-    "auth-docs": "node apps/auth-service/src/swagger.mjs"
+    "auth-docs": "node apps/auth-service/src/swagger.mjs",
+    "user-ui": "pnpx nx run-many --target=dev -all --projects=user-ui"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,7 @@
     "express-rate-limit": "^7.5.0",
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.508.0",
     "morgan": "^1.10.0",
     "next": "~15.2.4",
     "nodemailer": "^6.10.1",
