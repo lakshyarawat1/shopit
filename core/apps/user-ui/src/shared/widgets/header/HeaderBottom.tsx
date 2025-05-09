@@ -42,7 +42,7 @@ const HeaderBottom = () => {
         }`}
       >
         <div
-          className={`w-[268px] cursor-pointer flex items-center justify-between px-5 h-[50px] bg-[#3489ff] rounded-md`}
+          className={`w-[268px] cursor-pointer flex items-center justify-between px-5 h-[50px] bg-[#3489ff] `}
           onClick={() => setShow(!show)}
         >
           <div className="flex items-center gap-2">
