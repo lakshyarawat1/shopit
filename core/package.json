@@ -10,6 +10,7 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^6.7.0",
+    "@tanstack/react-query": "^5.75.5",
     "@types/axios": "^0.14.4",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
@@ -33,6 +34,8 @@
     "prisma": "^6.7.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.56.3",
+    "react-icons": "^5.5.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   },

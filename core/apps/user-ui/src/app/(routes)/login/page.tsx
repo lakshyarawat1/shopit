@@ -1,5 +1,7 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -25,8 +27,27 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const loginMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URI}/api/login-user`,
+        data,
+        { withCredentials: true }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setServerError(null);
+      router.push("/");
+    },
+    onError: (error: AxiosError) => {
+      const errorMessage = (error.response?.data as { message: string })?.message || "Invalid Credentials !"
+      setServerError(errorMessage);
+    }
+  });
+
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    loginMutation.mutate(data);
   };
 
   return (
@@ -120,9 +141,10 @@ const Login = () => {
             </div>
             <button
               type="submit"
+              disabled={loginMutation.isPending}
               className="w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 ease-in-out"
             >
-              Login
+              {loginMutation.isPending ? 'Logging in...' : 'Login'} 
             </button>
             {serverError && (
               <p className="text-red-500 text-sm text-center mt-2">
