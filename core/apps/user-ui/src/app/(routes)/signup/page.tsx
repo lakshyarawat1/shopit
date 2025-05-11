@@ -62,7 +62,7 @@ const SignUp = () => {
       startResendTimer();
     },
     onError: (error: AxiosError) => {
-      const errorMessage = (error.response?.data as { message: string })?.message || 'Invalid Credentials !';
+      const errorMessage = (error.response?.data as { message: string })?.message || 'Something went wrong ! Try again later.';
       setServerError(errorMessage);
     },
   });
@@ -113,7 +113,9 @@ const SignUp = () => {
   };
 
   const resendOTP = () => {
-    console.log('Notohign');
+    if (userData) {
+      signupMutation.mutate(userData);
+    }
   };
 
   return (
