@@ -1,5 +1,7 @@
 'use client';
 
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import useUser from 'apps/user-ui/src/hooks/useUser';
 import { navItems } from '../../../../src/config/constants';
 import { NavItemsTypes } from '../../../../src/config/globals';
 import {
@@ -29,6 +31,8 @@ const HeaderBottom = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const { user, isLoading } = useUser();
 
   return (
     <div
@@ -72,16 +76,37 @@ const HeaderBottom = () => {
         {isSticky && (
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
-              <Link
-                href="/login"
-                className="border-2 w-[50px] h-[50px] flex items-center justify-center rounded-full border-[#010f1c1a]"
-              >
-                <User />
-              </Link>
-              <Link href="/login">
-                <span className="block font-medium">Hello,</span>
-                <span className="font-semibold">Sign In</span>
-              </Link>
+              {!isLoading && user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="border-2 w-[50px] h-[50px] flex items-center justify-center rounded-full border-[#010f1c1a]"
+                  >
+                    <User />
+                  </Link>
+                  <Link href="/profile">
+                    <span className="block font-medium">Hello,</span>
+                    <span className="font-semibold">
+                      {user?.name?.split(' ')[0]}
+                    </span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="border-2 w-[50px] h-[50px] flex items-center justify-center rounded-full border-[#010f1c1a]"
+                  >
+                    <User />
+                  </Link>
+                  <Link href="/login">
+                    <span className="block font-medium">Hello,</span>
+                    <span className="font-semibold">
+                      {isLoading ? '...' : 'Sign In'}
+                    </span>
+                  </Link>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-5">
               <Link
