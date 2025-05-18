@@ -14,8 +14,8 @@ model Image {
   url     String
   userId  String? @unique @db.ObjectId
   shopId  String? @unique @db.ObjectId
-  Shops   Shop?   @relation(fields: [shopId], references: [id])
-  User    User?   @relation(fields: [userId], references: [id])
+  shops   Shop?   @relation(fields: [shopId], references: [id])
+  users   User?   @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -34,15 +34,33 @@ model User {
 model ShopReview {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String?  @db.ObjectId
-  shopId    String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
   ratings   Float
   reviews   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
-  Shop      Shop?    @relation(fields: [shopId], references: [id])
+  shopsId    String?  @db.ObjectId
+  shops      Shop?    @relation(fields: [shopsId], references: [id])
 }
 
+model Shop {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  bio  String?
+  category     String
+  avatar       Image?
+  coverBanner  String?
+  address      String
+  openingHours String?
+  website      String?
+  socialLinks  Json[]
+  ratings      Float        @default(0)
+  reviews      ShopReview[]
+  sellerId     String       @unique @db.ObjectId
+  sellers      Seller       @relation(fields: [sellerId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
 model Seller {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
@@ -54,25 +72,7 @@ model Seller {
   shop         Shop?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  shopId       String?  @unique @db.ObjectId
-}
-
-model Shop {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  description  String?
-  category     String
-  avatar       Image?
-  coverBanner  String?
-  address      String
-  openingHours String?
-  website      String?
-  socialLinks  Json[]
-  ratings      Float        @default(5)
-  reviews      ShopReview[]
-  sellers      Seller       @relation(fields: [sellerId], references: [id])
-  sellerId     String       @unique @db.ObjectId
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  shopId       String?  @db.ObjectId
+  shopsId      String?  @db.ObjectId
 }
 
