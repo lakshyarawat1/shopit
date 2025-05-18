@@ -6,7 +6,7 @@
     "dev": "pnpx nx run-many --target=serve --all",
     "auth-docs": "node apps/auth-service/src/swagger.mjs",
     "user-ui": "pnpx nx run-many --target=dev -all --projects=user-ui",
-    "seller-ui" : "pnpx nx run-many --target=dev -all --projects=seller-ui"
+    "seller-ui": "pnpx nx run-many --target=dev -all --projects=seller-ui"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +38,7 @@
     "react-hook-form": "^7.56.3",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "stripe": "^18.1.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   },

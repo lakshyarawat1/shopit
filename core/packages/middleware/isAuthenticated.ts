@@ -1,10 +1,10 @@
 import prisma from "@packages/libs/prisma";
-import { NextFunction, Response } from "express";
+import e, { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 
 const isAuthenticated = async (req: any, res: Response, next: NextFunction) => { 
     try {
-        const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[0];
+        const token = req.cookies["accessToken"] || req.cookies["sellerAccessToken"] || req.headers.authorization?.split(" ")[0];
 
         if (!token) {
             return res.status(401).json({ message: "Unauthorized ! Token missing.", token:token })
@@ -16,9 +16,17 @@ const isAuthenticated = async (req: any, res: Response, next: NextFunction) => {
             return res.status(401).json({ message : "Unauthorized ! Invalid token." })
         }
 
-        const account = await prisma.user.findUnique({ where: { id: decoded.id } })
+        let account;
+        if (decoded.role === 'user') {
+            await prisma.user.findUnique({ where: { id: decoded.id } })
+            req.user = account;
+        } else if (decoded.role === 'seller') { 
+            await prisma.seller.findUnique({ where: { id: decoded.id }, include: { shop: true } })
+            req.seller = account;
+        }
+
+        req.role = decoded.role;
         
-        req.user = account;
         if (!account) {
             return res.status(401).json({ message: "Unauthorized ! User not found." })
         }
