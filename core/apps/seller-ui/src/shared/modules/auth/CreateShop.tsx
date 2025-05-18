@@ -58,7 +58,7 @@ const CreateShop = ({
           type="text"
           placeholder="Shop Description"
           className="w-full p-2 border border-gray-300 outline-none rounded-[4px] mb-1"
-          {...register('description', {
+          {...register('bio', {
             required: 'Description is required.',
             validate: (value) =>
               countWords(value) <= 100 || 'Bio cannot be more than 100 words',
@@ -86,7 +86,7 @@ const CreateShop = ({
           type="text"
           placeholder="e.g. 9:00 AM - 5:00 PM"
           className="w-full p-2 border border-gray-300 outline-none rounded-[4px] mb-1"
-          {...register('opening_hrs', {
+          {...register('openingHours', {
             required: 'Opening Hours is required.',
           })}
         />

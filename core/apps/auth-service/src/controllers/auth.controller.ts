@@ -213,6 +213,8 @@ export const verifySeller = async (req: Request, res: Response, next: NextFuncti
     try {
         const { email, otp, password, name, phone_number, country } = req.body;
 
+        console.log("req.body", req.body);
+
         if (!email || !otp || !password || !name || !phone_number || !country) {
             return next(new ValidationError("Please provide all required fields."));
         }
@@ -337,7 +339,7 @@ export const createStripeConnectLink = async (req: Request, res: Response, next:
         const account = await stripe.accounts.create({
             type: 'express',
             email: seller?.email,
-            country: "IN",
+            country: "US",
             capabilities: {
                 card_payments: { requested: true },
                 transfers : {requested : true},

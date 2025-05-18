@@ -13,13 +13,13 @@ import { useForm } from 'react-hook-form';
 
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [activeStep, setActiveStep] = useState(3);
+  const [activeStep, setActiveStep] = useState(1);
   const [timer, setTimer] = useState(60);
   const [otp, setOtp] = useState(['', '', '', '']);
   const [serverError, setServerError] = useState<string | null>(null);
   const [sellerData, setSellerData] = useState<FormData | null>(null);
   const [showOTP, setShowOTP] = useState(false);
-  const [sellerId, setSellerId] = useState<FormData | null>(null)
+  const [sellerId, setSellerId] = useState<FormData | null>(null);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -77,24 +77,27 @@ const SignUp = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      setSellerId(data?.seller?.id)
+      setSellerId(data?.seller?.id);
       setActiveStep(2);
     },
   });
 
-  const connectStripe = async () => { 
+  const connectStripe = async () => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URI}/api/create-stripe-link`, {
-        sellerId
-      })
-      
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URI}/api/create-stripe-link`,
+        {
+          sellerId,
+        }
+      );
+
       if (response.data?.url) {
         window.location.href = response.data?.url;
       }
-    } catch (error) { 
+    } catch (error) {
       console.error('Error connecting to Stripe:', error);
     }
-  }
+  };
 
   const onSubmit = (data: any) => {
     signupMutation.mutate(data);
@@ -203,7 +206,7 @@ const SignUp = () => {
                   type="tel"
                   placeholder="+1 234 567 8900"
                   className="w-full p-2 border border-gray-300 outline-0 rounded-lg mb-1"
-                  {...register('phone number', {
+                  {...register('phone_number', {
                     required: 'Phone number is required.',
                     pattern: {
                       value: /^\+?[1-9]\d{1,14}$/,
@@ -357,11 +360,16 @@ const SignUp = () => {
           <div className="text-center">
             <h3 className="text-2xl font-semibold">Withdraw method</h3>
             <br />
-            <button className='w-full m-auto items-center justify-center gap-3 text-lg bg-[#334155] text-white py-2 rounded-lg' onClick={connectStripe}>Connect Razorpay<CircleDollarSign /></button>
+            <button
+              className="w-full m-auto items-center justify-center gap-3 text-lg bg-[#334155] text-white py-2 rounded-lg flex"
+              onClick={connectStripe}
+            >
+              Connect Stripe
+              <CircleDollarSign />
+            </button>
           </div>
         )}
       </div>
-
     </div>
   );
 };
