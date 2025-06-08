@@ -44,6 +44,7 @@ const Login = () => {
         (error.response?.data as { message: string })?.message ||
         'Invalid Credentials !';
       setServerError(errorMessage);
+      console.log(error)
     },
   });
 

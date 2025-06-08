@@ -9,7 +9,7 @@ const fetchUser = async () => {
   return response.data.user;
 };
 
-const useUser = () => {
+const useSeller = () => {
   const {
     data: user,
     isLoading,
@@ -24,4 +24,4 @@ const useUser = () => {
   return { user, isLoading, isError, refetch };
 };
 
-export default useUser;
+export default useSeller;
