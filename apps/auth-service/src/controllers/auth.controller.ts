@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { setCookie } from "../utils/cookies/setCookie";
 import Stripe from 'stripe'
+import { decode } from "punycode";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2025-04-30.basil'
@@ -104,7 +105,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => { 
     try {
-        const refreshToken = req.cookies.refreshToken;
+        const refreshToken = req.cookies.accessToken || req.cookies.sellerAccessToken || req.headers.authorization?.split(" ")[1];
 
         if (!refreshToken) {
             return new ValidationError("Unauthorized ! No refresh token provided.");
@@ -116,8 +117,15 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
             return new JsonWebTokenError("Forbidden ! Invalid refresh token.");
             
         }
-        const user = await prisma.user.findUnique({ where: { id: decoded.id } })
-        if (!user) {
+
+        let account;
+        if (decoded.role === 'user') {
+            account = await prisma.user.findUnique({ where: { id: decoded.id } })
+        } else if (decoded.role === 'seller') {
+            account= await prisma.seller.findUnique({ where: { id: decoded.id }, include: { shop: true } })
+        }
+
+        if (!account) {
             return new AuthenticationError("Forbidden ! User/Seller does not exist.")
         }
         const newAccessToken = jwt.sign(
@@ -125,7 +133,12 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
             process.env.ACCESS_TOKEN_SECRET as string,
             {expiresIn:"15m"}
         )
-        setCookie(res, "accessToken", newAccessToken);
+        if (decoded.role === 'user') {
+            setCookie(res, "accessToken", newAccessToken);
+        }
+        else if (decoded.role === 'seller') { 
+            setCookie(res, "sellerAccessToken", newAccessToken);
+        }
 
         return res.status(200).json({ success:true })
     } catch (err) {
